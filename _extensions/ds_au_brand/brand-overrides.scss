@@ -1,0 +1,96 @@
+/*-- scss:rules --*/
+
+// Shared, mode-agnostic fixes that depend on brand.yml's Sass variables
+// ($primary, $secondary, $body-color, etc.) existing. Because this file
+// is compiled separately per mode (once against light Sass variables,
+// once against dark), these values automatically resolve correctly in
+// each mode without needing any runtime attribute/class gating -- do NOT
+// add `[data-bs-theme=...]` selectors here (Quarto's toggle never sets
+// that attribute; see brand-overrides-light.scss/brand-overrides-dark.scss
+// for genuinely mode-specific rules, which must instead be split into
+// separate files loaded only under the matching light:/dark: theme key).
+//
+// Load in a project's theme list *after* `brand` and *before* any
+// project-specific scss, e.g.:
+//
+//   theme:
+//     light: [brand, brand-overrides.scss, brand-overrides-light.scss, my_css.scss]
+//     dark:  [brand, brand-overrides.scss, brand-overrides-dark.scss, my_css.scss]
+//
+// Also pair this with a per-mode highlight-style in the consuming
+// project's _quarto.yml:
+//
+//   highlight-style:
+//     light: arrow
+//     dark: arrow-dark
+//
+// Project-specific rules (icon badges, solution boxes, Mermaid colors,
+// table utilities, etc.) belong in the project's own my_css.scss, not
+// here -- this file is only for fixes tied to the brand's color system
+// itself, so it stays applicable to any project using this brand.
+
+// Quarto's book chapter-to-chapter navigation links (prev/next arrows)
+// hardcode Bootstrap's default gray-600 (#6c757d) regardless of theme,
+// independent of brand.yml entirely. That color passes AA against white
+// (4.69:1) but fails AA against this brand's dark-mode navy background
+// (3.30:1). Rebind to the brand's own (already contrast-verified) colors.
+.nav-page a {
+  color: $primary;
+}
+.nav-page a:hover {
+  color: $body-color;
+}
+
+// Bootstrap hardcodes the ACTIVE panel-tabset/nav-tabs label to pure
+// black (--bs-nav-tabs-link-active-color: #000) regardless of theme,
+// while its active background resolves to this brand's own navy
+// (--bs-nav-tabs-link-active-bg, which equals background.dark). Black
+// text on that navy background is unreadable in dark mode. Rebind to
+// $body-color so the active tab label stays legible in both modes.
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: $body-color;
+}
+
+// Inline code (`` `code` ``) outside of code blocks -- including inside
+// headings -- inherits `color: inherit` from Bootstrap's base `code`
+// rule. In body text that's fine (paragraph text is already legible),
+// but heading text in this brand's dark mode is a light blue
+// ($primary: au-light-blue, #B3D7FF) sitting on inline code's own pale
+// translucent pill background (rgba(233,236,239,.65)) -- both are light,
+// so the text becomes effectively invisible. Force inline code to a
+// fixed, always-legible dark color instead of inheriting the
+// surrounding element's color, in both modes.
+//
+// Scoped to `:not(pre) > code:not(.sourceCode)` -- i.e. inline code
+// pills only, NOT `pre code` -- because a plain, unclassed
+// `<pre><code>...</code></pre>` block (e.g. static example output like
+// `[1] "2014-01-01 05:01:11 EST"`, written directly as a fenced code
+// block with no language, not an executed cell) also matches
+// `code:not(.sourceCode)`. Those blocks have no pill background at all
+// (they render as bare text against the page), so forcing this same
+// fixed dark color onto them made real/example console output
+// completely invisible against the dark navy page -- a regression
+// caught after a user reported "code results disappeared" in dark mode.
+// `pre code` should instead keep inheriting `pre`'s own (already
+// legible, brand-driven) text color.
+//
+// Also fixes an unrelated sizing bug reported separately: Bootstrap's
+// own base rule sizes inline code at `font-size: 0.875em`, relative to
+// the *immediate parent*. Inside a heading (e.g. an h3 at roughly 1.75x
+// body size), that 0.875em compounds against the heading's own already
+// -large size, so inline code pills inside headings rendered visibly
+// bigger than surrounding body text instead of smaller. Using `rem`
+// (relative to the root font-size only, never compounding with an
+// ancestor's size) instead of `em` keeps inline code a consistent size
+// everywhere, headings included.
+//
+// Size tightened from 0.875rem to 0.7rem (2026-08-10): 0.875rem still
+// read as too large relative to body text across every book using this
+// brand -- 0.7rem matches the `.font-small` utility size convention
+// used project-side and reads as clearly "smaller than body text" rather
+// than nearly the same size.
+:not(pre) > code:not(.sourceCode) {
+  color: #212529;
+  font-size: 0.7rem;
+}

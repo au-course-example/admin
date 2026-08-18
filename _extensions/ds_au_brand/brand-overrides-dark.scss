@@ -1,0 +1,26 @@
+/*-- scss:rules --*/
+
+// Dark-mode-only fixes. Loaded only under the project's `theme: dark:`
+// key (alongside the shared brand-overrides.scss), so no runtime
+// attribute/class gating is needed -- this file is only ever compiled
+// into the dark bundle, which Quarto's color-scheme toggle layers on top
+// of the light bundle (both stay enabled simultaneously; the dark
+// bundle's rules win by DOM order for equal specificity).
+
+// Quarto reuses the *same* translucent light-gray overlay
+// (rgba(233,236,239,.65)) for code-block backgrounds in both light and
+// dark mode. Composited over this brand's dark navy page background
+// (au-navy-vivid, #00205B) that only reaches a pale blue-gray (~
+// rgb(151,165,187), relative luminance ~0.37) -- nowhere near dark
+// enough for a dark-tuned syntax highlight theme's light/pastel token
+// colors to read clearly against, which is what produced the washed-out
+// "pastel on pastel" look across code chunks in dark mode. Force a
+// genuinely dark background instead (a shade lighter than the page
+// itself, so code blocks still read as a distinct "card"), so the
+// dark-mode highlight-style (arrow-dark, set in _quarto.yml) has the dark
+// background it was actually designed for.
+div.sourceCode,
+pre.sourceCode {
+  background-color: #12203f;
+  border-color: #12203f;
+}

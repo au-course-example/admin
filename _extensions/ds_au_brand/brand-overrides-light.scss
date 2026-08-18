@@ -1,0 +1,20 @@
+/*-- scss:rules --*/
+
+// Light-mode-only fixes. Loaded only under the project's `theme: light:`
+// key (alongside the shared brand-overrides.scss), so no runtime
+// attribute/class gating is needed -- this file is only ever compiled
+// into the light bundle.
+
+// arrow-light's Attribute token color (`.at`, used for shell flags like
+// --version/-la) measures only a thin ~4.6:1 against the light-mode code
+// block's actual composited background, effectively failing AA once
+// real rendering/rounding is accounted for. #1f2a06 (near-black olive)
+// clears AA (13.52:1) against that composite.
+//
+// Must NOT be applied in dark mode: dark mode uses arrow-dark's own
+// Attribute color (#00e0e0, a bright cyan), which already contrasts
+// well (>10:1) against the genuinely dark background set in
+// brand-overrides-dark.scss.
+code span.at {
+  color: #1f2a06;
+}

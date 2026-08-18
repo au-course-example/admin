@@ -1,0 +1,365 @@
+/*
+  Reference catalog of CSS classes used across AU course-book repos that
+  consume this brand (STAT-427-627, DATA-413-613, DATA-793 lectures_book,
+  as of 2026-08-10).
+
+  This file is NEVER loaded by any project's `theme:` list -- it isn't
+  wired into `_extension.yml`'s `contributes:` at all. It exists purely
+  as a copy-from-here catalog: when a project needs a class it recalls
+  seeing in a sibling repo, look here first instead of re-deriving it
+  from scratch (or worse, hunting through another repo's git history).
+
+  Usage: copy the class(es) you need into your own project's scss file
+  (see naming convention: scss_<course-code>.scss, e.g.
+  scss_stat_427_627.scss). It's fine -- expected, even -- for a project's
+  own scss file to carry a class it doesn't currently use, if it's likely
+  to be useful later. Trim only if a class is actively wrong for that
+  project, not just unused.
+
+  A few classes below are intentionally left as *documented options*
+  rather than one-size-fits-all rules (e.g. inline-code font-size) --
+  see the note at each such entry.
+*/
+
+/*-- scss:rules --*/
+
+// ---------------------------------------------------------------------
+// Icon badges
+// ---------------------------------------------------------------------
+
+.i-circle {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+}
+
+.i-circle-green {
+    background: #7CFC00;
+    color: #fff;
+    padding: 5px 5px;
+    border-radius: 50%;
+    font-size: 12px
+}
+
+.i-circle-red {
+    background: #ff0000;
+    color: #fff;
+    padding: 5px 5px;
+    border-radius: 50%;
+    font-size: 12px
+}
+
+// ---------------------------------------------------------------------
+// Print / PDF helpers
+// ---------------------------------------------------------------------
+
+.page_break_before {
+    page-break-before: always
+}
+
+// ---------------------------------------------------------------------
+// MathJax sizing
+// ---------------------------------------------------------------------
+
+.MathJax {
+    font-size: 100% !important;
+}
+
+.math.inline .MathJax  {
+  font-size: 110% !important;
+}
+
+.math.display .MathJax  {
+  font-size: 120% !important
+}
+
+// ---------------------------------------------------------------------
+// Layout utilities
+// ---------------------------------------------------------------------
+
+.v-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.vspace-2cm {
+     margin-bottom: 2cm;
+  }
+
+.center-text {
+  text-align: center;
+}
+
+// Floats an image/figure to the right of surrounding text, with a
+// fixed width matching a typical small illustration plus padding.
+// Adjust the width per use if the image doesn't match ~220px.
+.float-right {
+  float: right;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  width: 220px; /* Matches image width plus padding */
+  display: inline-block;
+}
+.float-right figure {
+  text-align: center;
+  margin: 0;
+}
+.float-right figcaption {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 5px;
+}
+
+// ---------------------------------------------------------------------
+// Font-size utility family
+// ---------------------------------------------------------------------
+
+.table-tiny {
+    font-size: .5em;
+    line-height: 1.2em;
+}
+
+.font-medium {
+    font-size: .85em;
+    line-height: 1.2em;
+}
+
+.font-small {
+    font-size: .7em;
+    line-height: 1.2em;
+}
+
+.font-tiny {
+    font-size: .5em;
+    line-height: 1.2em;
+}
+
+// ---------------------------------------------------------------------
+// Compact tables: two distinct levels, not one replacing the other
+// ---------------------------------------------------------------------
+// `.table-tiny` (above) is a blunt, single-size shrink applied uniformly
+// to the whole table, including headers -- appropriate when a table
+// needs to be genuinely tiny (e.g. to fit a dense reference table on one
+// slide/page). `.table-small` below is a gentler, more targeted shrink:
+// it leaves column headers at their normal size and only shrinks the
+// body text and cell padding, which reads as "a normal table, just a
+// bit more compact" rather than "a miniature table." Pick whichever
+// degree fits -- they compose the same way and don't conflict since
+// `.table-tiny` targets the whole `table` element while `.table-small`
+// targets `thead th`/`tbody`/`th, td` separately.
+//
+// Usage:
+// ::: {.table-small}
+// | Column 1 | Column 2 |
+// |----------|----------|
+// | Value    | Value    |
+//
+// : Table caption
+// :::
+.table-small table {
+  line-height: 1.2;
+}
+
+// Keeps the table's column-heading text at the standard inherited size.
+.table-small thead th {
+  font-size: 1em;
+}
+
+// Reduces the font size only in the table body rows.
+.table-small tbody {
+  font-size: 0.8em;
+}
+
+// Reduces the padding around all header and body cells in a small table.
+.table-small th,
+.table-small td {
+  padding: 0.3rem 0.5rem;
+}
+
+// ---------------------------------------------------------------------
+// Striped tables
+// ---------------------------------------------------------------------
+
+.table-striped {
+    border: 2px solid #04AA6d;
+    border-bottom: hidden;
+    font-size: .75em;
+    line-height: 1.2em;
+}
+
+.table-striped th {
+      background-color: #04AA6d;
+      color: white;
+}
+
+// Row backgrounds here are fixed light pastel colors regardless of
+// light/dark mode. Without an explicit text color, row text inherits the
+// page's foreground color -- fine in light mode (dark text), but washed
+// out in dark mode, where a brand's dark-mode foreground is typically a
+// light off-white sitting on these same light pastel backgrounds. Force
+// a fixed dark text color so these rows stay legible in both modes.
+.table-striped  tr:nth-child(odd) {
+      background-color: #bfedd2;
+      color: #212529;
+}
+
+.table-striped  tr:nth-child(even) {
+      background-color: #c2e0f4;
+      color: #212529;
+}
+
+.table-striped  tr:last-child {
+      border-bottom: 2px solid #04AA6d;
+}
+
+// ---------------------------------------------------------------------
+// Callout-like boxes
+// ---------------------------------------------------------------------
+
+.text-solution {
+  background: #dfeffb;
+  border: true;
+  border: 2px solid #85c2ef;
+  font-size: .9em;
+  padding: 12px 4px 0px 4px;
+  line-height: 1.1em;
+  margin-bottom: 10px;
+}
+
+// ---------------------------------------------------------------------
+// HTML widgets (leaflet, plotly, DT, etc.)
+// ---------------------------------------------------------------------
+
+.html-widget {
+  margin-bottom: 1em;
+}
+
+// ---------------------------------------------------------------------
+// Brand-derived text-color utilities
+// ---------------------------------------------------------------------
+// Re-derived from a brand's own Sass variables instead of a fixed hex, so
+// these stay legible in both light and dark mode automatically (assuming
+// the consuming project's brand.yml keeps $primary/$secondary
+// contrast-verified against both mode backgrounds, as ds_au_brand's does).
+// A fixed hex here (e.g. Bootstrap's default gray-600, #6c757d) can pass
+// AA against a white background while failing AA against a dark navy one
+// -- that's exactly the bug this pair of classes exists to avoid.
+
+.light-gray {
+  color: $secondary;
+}
+
+.light-blue {
+  color: $primary;
+}
+
+// ---------------------------------------------------------------------
+// Light-background wrapper for dark-text/transparent images
+// ---------------------------------------------------------------------
+// Wraps an image in an opaque light background/padding card so it stays
+// legible against a dark-mode page background -- useful for any
+// diagram/screenshot with dark text baked into a white or transparent
+// background.
+//
+// Usage:
+// ::: {.img-light-bg}
+// ![](image.png)
+// :::
+.img-light-bg {
+  display: inline-block;
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  // inline-block establishes its own formatting context, so the Quarto
+  // figure's own `.quarto-figure { margin-bottom: 1em; }` gets trapped
+  // *inside* this box (showing as extra blank space below the caption)
+  // instead of pushing space out *after* the box -- zero out the
+  // trapped inner margin and add it back on the box itself instead.
+  margin-bottom: 1em;
+}
+
+.img-light-bg .quarto-figure {
+  margin-bottom: 0;
+}
+
+// ---------------------------------------------------------------------
+// Opt-in Mermaid dark-mode-safe defaults
+// ---------------------------------------------------------------------
+// Mermaid renders client-side (a raw <pre class="mermaid"> is executed
+// by mermaid.js in the browser), and its own generated per-diagram
+// styles are ID-scoped (e.g. `#mermaid-diagram-r0 .cluster rect{...}`),
+// which beats a plain `.mermaid ...` selector on specificity alone -- so
+// forcing a color here without `!important` would silently do nothing,
+// but adding `!important` to a *global*, unscoped `.mermaid` selector
+// would clobber every diagram equally, including ones that deliberately
+// set their own clusterBkg/clusterBorder/lineColor via
+// `%%{init: ...}%%`. (An earlier, unscoped version of exactly this rule
+// existed in one consuming repo and would have silently overridden a
+// diagram elsewhere in that same book that customized its own colors --
+// discovered and fixed 2026-08-10.)
+//
+// Scope this under an opt-in wrapper class instead: only diagrams
+// deliberately wrapped in a `.mermaid-au-theme` fenced div pick up these
+// defaults (verified: Quarto/Pandoc places the fenced div as an ancestor
+// of the diagram's own <pre class="mermaid">, so this selector reaches
+// it). Diagrams with their own `%%{init: ...}%%` directive should skip
+// the wrapper entirely and keep managing their own colors.
+//
+// Usage:
+// ::: {.mermaid-au-theme}
+// ```{mermaid}
+// flowchart LR
+//   A --> B
+// ```
+// :::
+//
+// If a project's book has *existing* Mermaid diagrams that currently
+// rely on an older, unscoped global version of this rule, wrap each of
+// them in `.mermaid-au-theme` in the same pass that adopts this scoped
+// version, or their appearance will silently revert to raw Mermaid
+// defaults.
+.mermaid-au-theme {
+  --mermaid-node-bg-color: #f8f9fa;
+  --mermaid-node-fg-color: #2c3e50;
+  --mermaid-node-border-color: #6c757d;
+  --mermaid-edge-color: #2c3e50;
+  --mermaid-label-bg-color: #ffffff;
+  --mermaid-cluster-bg-color: #dee2e6;
+  --mermaid-cluster-fg-color: #2c3e50;
+  --mermaid-cluster-border-color: #6c757d;
+}
+
+.mermaid-au-theme .mermaid text {
+  fill: #2c3e50 !important;
+}
+
+.mermaid-au-theme .mermaid .cluster rect {
+  fill: #dee2e6 !important;
+  stroke: #6c757d !important;
+}
+
+// ---------------------------------------------------------------------
+// Documented option (not copy-pasted as a fixed rule): inline-code size
+// ---------------------------------------------------------------------
+// brand-overrides.scss sets `:not(pre) > code:not(.sourceCode) { color:
+// ...; font-size: 0.875rem; }`. Individual books have overridden just the
+// font-size half of that rule to taste (e.g. one book shrinks it to
+// 0.7rem because at 0.875rem the inline-code pill background read as
+// noticeably larger than surrounding body text). Do this in your own
+// project's scss file, loaded after brand-overrides.scss, rather than
+// copying a fixed value here -- it's a per-book taste call, not a shared
+// default:
+//
+// :not(pre) > code:not(.sourceCode) {
+//   font-size: 0.7rem; // or whatever reads right for this book
+// }
+//
+// (This copy-from block is illustrative text, not an active rule --
+// nothing in this file is loaded by any project's theme: list.)

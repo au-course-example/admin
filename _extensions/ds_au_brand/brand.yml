@@ -1,0 +1,128 @@
+# Shared American University (AU) brand definition for Quarto projects,
+# packaged as a Quarto Brand Extension so multiple books/projects can
+# `quarto add` it and stay in sync via `quarto update`, rather than each
+# maintaining its own copy of this file.
+#
+# Originally authored for the ds_comp_env book (AU conference poster
+# template lineage before that); extracted here as the single source of
+# truth. If you need to change a color or font, change it here and run
+# `quarto update` in each consuming project -- don't hand-edit the copy
+# under a project's _extensions/ directory.
+#
+# See https://quarto.org/docs/authoring/brand.html
+meta:
+  name: "American University"
+
+# Declaring `logo:` auto-inserts this image into a book's top navbar
+# (small > medium > large preference), side navigation (medium > small >
+# large), and the browser-tab favicon (small). Only one source image
+# exists, so it's reused for both `small` and `medium` rather than
+# declaring separate crops/sizes.
+#
+# Caveat: the file has a *white* background baked in (see its name), not
+# a transparent one. That reads fine in light mode's white navbar/sidebar,
+# but shows as a visible white box behind the logo in dark mode's navy
+# chrome. Left as-is for now since no transparent/dark-mode variant of the
+# AU logo exists yet -- swap one in later if that look is distracting, or
+# disable per-project via `book: navbar: logo: false` / `sidebar: logo:
+# false` in that project's _quarto.yml.
+logo:
+  small: AU-Logo-on-white-small.png
+  medium: AU-Logo-on-white-small.png
+
+color:
+  # Muted versions of AU's official navy/red/blue for accents (borders,
+  # footer bars, headings) so they read as calm brand cues rather than
+  # competing with a project's actual content. The full-saturation brand
+  # hex codes (au-navy-vivid/au-red-vivid) are kept below for spots that
+  # need a punchier "official" swatch, including dark-mode accents.
+  palette:
+    au-navy: "#25406A"
+    au-blue: "#3E6DA3"
+    au-light-blue: "#B3D7FF"
+    au-red: "#A8384F"
+    # Text colors, dark enough to clear WCAG AAA (7:1) at normal size on
+    # a white background. Plain #666666 gray measures only 5.35:1 (AA,
+    # not AAA); au-blue-text exists separately from au-blue so links can
+    # darken without darkening anything else that also uses au-blue.
+    au-grey: "#505050"
+    au-blue-text: "#2F527A"
+    au-navy-vivid: "#00205B"
+    au-blue-vivid: "#0047B3"
+    au-red-vivid: "#CC0033"
+    # Soft off-white used as dark-mode foreground text, softer than pure
+    # white against the dark navy background below.
+    au-offwhite: "#F0F4FA"
+    # Dark-mode-only variants of au-blue/au-red, lightened specifically so
+    # `secondary`/`info` text clears WCAG AA (4.5:1) against the
+    # au-navy-vivid background below. au-blue and au-red-vivid *look*
+    # reasonable at a glance but measure well under AA there (2.89:1 and
+    # 2.66:1 respectively).
+    au-blue-soft: "#8FB8E8"
+    au-red-soft: "#FF6B81"
+    # NOTE: Bootstrap's default gray-600 (#6c757d) is NOT part of this
+    # palette on purpose. It measures 4.69:1 on white (barely AA) and only
+    # 3.30:1 against au-navy-vivid below (fails AA outright). Any consuming
+    # project that has its own "light gray" utility class using that exact
+    # hex should re-derive it from `secondary` instead of keeping it as a
+    # fixed value once it adopts this brand's dark mode.
+  # Verified with a WCAG contrast calculation (relative luminance formula)
+  # against each mode's actual background, not just eyeballed:
+  #   - light mode (background: white): au-grey ~8:1, au-blue-text 8.05:1,
+  #     au-navy 10.40:1 -- all comfortably pass AA (4.5:1) and clear or
+  #     approach AAA (7:1).
+  #   - dark mode (background: au-navy-vivid #00205B): au-offwhite 14.01:1
+  #     and au-light-blue 10.37:1 both pass easily. The original dark-mode
+  #     choices for `secondary` (au-blue, 2.89:1) and `info` (au-red-vivid,
+  #     2.66:1) both failed AA -- au-blue in particular drives figure/table
+  #     captions, blockquotes, and header section numbers via Quarto/
+  #     Bootstrap's `$secondary`-derived styles, so this was a real,
+  #     visible dark-mode defect. Replaced with the lightened
+  #     au-blue-soft (7.51:1) / au-red-soft (5.65:1) variants above.
+  background:
+    light: white
+    dark: au-navy-vivid
+  foreground:
+    light: au-grey
+    dark: au-offwhite
+  primary:
+    light: au-blue-text
+    dark: au-light-blue
+  secondary:
+    light: au-navy
+    dark: au-blue-soft
+  info:
+    light: au-red
+    dark: au-red-soft
+
+# Quarto/Bootstrap does not derive `--bs-link-color` from `primary` above by
+# default -- an axe-core accessibility audit (on ds_comp_env, before this
+# brand was extracted) found ordinary hyperlinks rendering as a fixed
+# #2a76dd regardless of light/dark mode or this file's `primary` values,
+# which measures only 4.44:1 against the light background (just under
+# WCAG AA's 4.5:1) and 3.49:1 against the dark background (a clear AA
+# failure). Explicitly binding `link-color` to `$primary` forces it to use
+# this file's actual, contrast-verified primary color in both modes
+# (8.05:1 light / 10.37:1 dark) instead of Bootstrap's unrelated default.
+# See https://quarto.org/docs/authoring/brand.html#bootstrap
+defaults:
+  bootstrap:
+    defaults:
+      link-color: $primary
+
+typography:
+  # Declaring this as a font *resource* (not just a family name) is what
+  # makes it reproducible: Quarto fetches the webfont from Google at
+  # render time and self-hosts it, instead of treating the name as a
+  # system font and silently falling back when it isn't installed.
+  #
+  # "Source Sans Pro" (the legacy Adobe name) is not what Google Fonts
+  # distributes; the current family is "Source Sans 3".
+  fonts:
+    - family: "Source Sans 3"
+      source: google
+  base:
+    family: "Source Sans 3"
+  headings:
+    family: "Source Sans 3"
+    weight: bold
